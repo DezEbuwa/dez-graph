@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dez Graph Editor</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <button id="btn-rect" class="btn">Rectangle</button>
+      <button id="btn-round" class="btn">Rounded Rect</button>
+      <button id="btn-ellipse" class="btn">Ellipse</button>
+      <button id="btn-circle" class="btn">Circle</button>
+      <button id="btn-connector" class="btn">Connector</button>
+      <button id="btn-select" class="btn">Select/Move (V)</button>
+      <button id="btn-group" class="btn">Group (G)</button>
+      <button id="btn-ungroup" class="btn">Ungroup</button>
+      <button id="btn-play" class="btn">Run Graph (▶)</button>
+      <div style="margin-left:auto" class="status">Hold <span class="kbd">Space</span> to pan • <span class="kbd">Wheel</span> zoom • <span class="kbd">Shift+Click</span> multi-select • <span class="kbd">Del</span> delete • <span class="kbd">Esc</span> cancel connector</div>
+    </header>
+
+    <aside class="left">
+      <div class="section">
+        <h3>Palette</h3>
+        <div class="tool" data-shape="logic:start">▶ Start (exec)</div>
+        <div class="tool" data-shape="logic:add">➕ Add (number)</div>
+        <div class="tool" data-shape="logic:mul">✖ Multiply (number)</div>
+        <div class="tool" data-shape="logic:vec3">🧱 Vec3(x,y,z)</div>
+        <div class="tool" data-shape="logic:dot">⋅ Dot(a,b)</div>
+        <div class="tool" data-shape="logic:length">∥a∥ Length</div>
+        <div class="tool" data-shape="logic:print">🖨 Print (any)</div>
+      </div>
+      <div class="section">
+        <h3>Examples</h3>
+        <button class="btn" id="btn-example">Load Vec3•Vec3 → Print</button>
+      </div>
+    </aside>
+
+    <main class="canvas-wrap">
+      <canvas id="stage"></canvas>
+    </main>
+
+    <aside class="right">
+      <div class="section">
+        <h3>Properties</h3>
+        <div id="props">No selection</div>
+      </div>
+      <div class="section">
+        <h3>Ports</h3>
+        <div id="ports">No selection</div>
+      </div>
+      <div class="section">
+        <h3>Debug</h3>
+        <pre id="debug" style="white-space: pre-wrap"></pre>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
