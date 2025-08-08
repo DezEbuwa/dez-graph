@@ -35,6 +35,7 @@ export const Logic = {
       const node = byNode.get(nodeId);
       if (!node) return;
       
+      // Collect inputs from connected data edges
       const inputs = {};
       for (const p of node.ports.filter(p => p.direction === 'in' && !p.isExec)) {
         const key = `${node.id}:${p.name}`;
@@ -42,22 +43,27 @@ export const Logic = {
         if (incoming.length) {
           const src = incoming[incoming.length - 1].from;
           const [srcNode, srcPort] = src.split(':');
-          const n = byNode.get(srcNode);
-          inputs[p.name] = n?.data[srcPort];
+          const sourceNode = byNode.get(srcNode);
+          // Get the value from the source node's output data
+          inputs[p.name] = sourceNode?.data[srcPort];
         } else {
+          // Use node's own data as fallback
           inputs[p.name] = node.data[p.name];
         }
       }
       
+      // Execute the node's logic
       const impl = Logic.registry.get(node.kind);
       const outputs = impl ? await impl(node, inputs, { log: debug }) : {};
       
+      // Store outputs in node data
       for (const p of node.ports.filter(p => p.direction === 'out' && !p.isExec)) {
         if (outputs && p.name in outputs) {
           node.data[p.name] = outputs[p.name];
         }
       }
       
+      // Follow execution edges to next nodes
       const outs = execOut.get(node.id) || [];
       for (const e of outs) {
         const toNodeId = e.to.split(':')[0];
@@ -69,8 +75,8 @@ export const Logic = {
 
 // Port helper functions
 export const logicPorts = {
-  execIn: () => new Port(uid('p'), null, 'in', 'exec', 'in', true),
-  execOut: () => new Port(uid('p'), null, 'out', 'exec', 'out', true),
+  execIn: () => new Port(uid('p'), null, 'exec', 'exec', 'in', true),
+  execOut: () => new Port(uid('p'), null, 'exec', 'exec', 'out', true),
   in: (name, type) => new Port(uid('p'), null, name, type, 'in', false),
   out: (name, type) => new Port(uid('p'), null, name, type, 'out', false)
 };
@@ -102,6 +108,12 @@ Logic.define('logic:vec3', (node, i, { log }) => {
   return { v };
 });
 
+Logic.define('logic:number', (node, i, { log }) => {
+  // Use input if provided, otherwise use the node's internal value
+  const v = Number(i.num ?? node.data.num ?? 0);
+  return { v };
+});
+
 Logic.define('logic:dot', (node, i, { log }) => {
   const a = i.a || { x: 0, y: 0, z: 0 };
   const b = i.b || { x: 0, y: 0, z: 0 };
@@ -119,8 +131,13 @@ Logic.define('logic:length', (node, i, { log }) => {
 
 Logic.define('logic:print', (node, i, { log }) => {
   let v = i.in;
-  if (typeof v === 'object') v = JSON.stringify(v);
-  log(`Print: ${v}`);
+  if (v === undefined || v === null) {
+    log(`Print: <no input connected or undefined>`);
+  } else if (typeof v === 'object') {
+    log(`Print: ${JSON.stringify(v)}`);
+  } else {
+    log(`Print: ${v}`);
+  }
   return {};
 });
 
@@ -133,7 +150,7 @@ export function makeLogicNode(kind, x, y) {
     x,
     y,
     w: 170,
-    h: 80,
+    h: 100, // Increased height to accommodate port labels
     label: kind.split(':')[1]
   });
 
@@ -163,6 +180,15 @@ export function makeLogicNode(kind, x, y) {
     n.data.x = 0;
     n.data.y = 0;
     n.data.z = 0;
+  } else if (kind === 'logic:number') {
+    n.ports = [
+      logicPorts.in('num', 'number'),
+      logicPorts.out('v', 'number')
+    ];
+    n.ports.forEach(p => p.nodeId = n.id);
+    n.data.num = 0;
+    // Initialize the output value immediately
+    n.data.v = 0;
   } else if (kind === 'logic:dot') {
     n.ports = [
       logicPorts.execIn(),

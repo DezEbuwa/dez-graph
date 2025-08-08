@@ -109,7 +109,7 @@ export class Renderer {
     const ports = n.ports || [];
     const left = ports.filter(p => p.direction === 'in');
     const right = ports.filter(p => p.direction === 'out');
-    const spacing = n.h / (Math.max(1, left.length) - 0 + 1);
+    const spacing = n.h / (Math.max(1, left.length) + 1);
     
     // Draw input ports (left side)
     left.forEach((p, i) => {
@@ -122,6 +122,19 @@ export class Renderer {
       p._px = x;
       p._py = y;
       
+      // Draw port label
+      if (p.name && !p.isExec) {
+        ctx.fillStyle = '#8c96a5';
+        ctx.font = '11px system-ui';
+        ctx.textAlign = 'left';
+        ctx.fillText(p.name, n.x + 8, y + 3);
+      } else if (p.isExec) {
+        ctx.fillStyle = '#8c96a5';
+        ctx.font = '11px system-ui';
+        ctx.textAlign = 'left';
+        ctx.fillText('exec', n.x + 8, y + 3);
+      }
+      
       const isHover = this.hoverPort && this.hoverPort.port === p;
       if (isHover) {
         ctx.lineWidth = 2;
@@ -133,7 +146,7 @@ export class Renderer {
     });
     
     // Draw output ports (right side)
-    const rspacing = n.h / (Math.max(1, right.length) - 0 + 1);
+    const rspacing = n.h / (Math.max(1, right.length) + 1);
     right.forEach((p, i) => {
       const y = n.y + rspacing * (i + 1);
       const x = n.x + n.w + 6;
@@ -143,6 +156,19 @@ export class Renderer {
       ctx.fill();
       p._px = x;
       p._py = y;
+      
+      // Draw port label
+      if (p.name && !p.isExec) {
+        ctx.fillStyle = '#8c96a5';
+        ctx.font = '11px system-ui';
+        ctx.textAlign = 'right';
+        ctx.fillText(p.name, n.x + n.w - 8, y + 3);
+      } else if (p.isExec) {
+        ctx.fillStyle = '#8c96a5';
+        ctx.font = '11px system-ui';
+        ctx.textAlign = 'right';
+        ctx.fillText('exec', n.x + n.w - 8, y + 3);
+      }
       
       const isHover = this.hoverPort && this.hoverPort.port === p;
       if (isHover) {

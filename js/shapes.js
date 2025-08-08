@@ -126,6 +126,17 @@ ShapeRegistry.define('logic:vec3', {
   }
 });
 
+ShapeRegistry.define('logic:number', {
+  draw(ctx, n) {
+    ctx.fillStyle = '#21323f';
+    ctx.strokeStyle = '#3a5f7a';
+    roundRectPath(ctx, n.x, n.y, n.w, n.h, 10);
+    ctx.fill();
+    ctx.stroke();
+    drawLabel(ctx, { ...n, label: 'Number' });
+  }
+});
+
 ShapeRegistry.define('logic:dot', {
   draw(ctx, n) {
     ctx.fillStyle = '#32243b';

@@ -245,10 +245,20 @@ export class Editor {
   setPortValue(n, p, val) {
     if (n.kind.startsWith('logic:')) {
       n.data[p.name] = val;
+      
+      // For number nodes, automatically update the output value
+      if (n.kind === 'logic:number' && p.name === 'num') {
+        n.data.v = Number(val);
+      }
     } else {
       p.value = val;
     }
     this.renderer.draw();
+    
+    // Refresh the properties panel to show updated output values
+    if (this.selectedNode === n) {
+      this.showNodeProps(n);
+    }
   }
 
   validateConnection(fromPort, toPort) {

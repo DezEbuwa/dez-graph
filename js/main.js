@@ -78,5 +78,5 @@ document.querySelectorAll('.tool[data-shape]').forEach(el => {
 
 // Bootstrap the application
 renderer.resize();
-loadExample();
+// loadExample();
 editor.updatePanels();
