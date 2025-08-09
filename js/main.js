@@ -18,12 +18,12 @@ const loadExample = () => {
   graph.edges.length = 0;
   
   const start = makeLogicNode('logic:start', 80, 60);
-  const v1 = makeLogicNode('logic:vec3', 280, 40);
+  const v1 = makeLogicNode('logic:vec3', 280, 190);
   v1.data.x = 1;
   v1.data.y = 2;
   v1.data.z = 3;
   
-  const v2 = makeLogicNode('logic:vec3', 280, 140);
+  const v2 = makeLogicNode('logic:vec3', 280, 300);
   v2.data.x = 4;
   v2.data.y = 5;
   v2.data.z = 6;
@@ -36,8 +36,8 @@ const loadExample = () => {
     isGroup: true,
     x: 40,
     y: 20,
-    w: 760,
-    h: 240,
+    w: 930,
+    h: 400,
     label: 'Vector Demo',
     members: [start.id, v1.id, v2.id, dot.id, prt.id]
   });
