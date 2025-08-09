@@ -12,7 +12,7 @@ export const Logic = {
   },
 
   async run(graph, debug) {
-    debug('▶ Running graph...');
+    debug('> Running graph...\n');
     const byNode = new Map(graph.nodes.map(n => [n.id, n]));
     const execOut = new Map();
     const dataIn = new Map();
