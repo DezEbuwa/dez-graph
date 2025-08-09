@@ -42,19 +42,6 @@ header {
   border-bottom: 1px solid #1f2430;
 }
 
-header .btn {
-  background: #1a2030;
-  color: var(--ink);
-  border: 1px solid #2a3142;
-  padding: 6px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-header .btn:hover {
-  border-color: var(--accent);
-}
-
 /* ===== Sidebar Panels ===== */
 .left,
 .right {
@@ -139,6 +126,20 @@ canvas {
 }
 
 /* ===== Form Elements ===== */
+.btn {
+  background: #1a2030;
+  color: var(--ink);
+  border: 1px solid #2a3142;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+}
+
 input[type="number"],
 input[type="text"],
 textarea {
