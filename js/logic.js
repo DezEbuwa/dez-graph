@@ -29,6 +29,27 @@ export const Logic = {
       }
     }
     
+    // First, evaluate all data-only nodes (nodes without exec ports)
+    for (const node of graph.nodes) {
+      if (node.kind.startsWith('logic:') && !node.ports.some(p => p.isExec)) {
+        const impl = Logic.registry.get(node.kind);
+        if (impl) {
+          const inputs = {};
+          // For data-only nodes, use their internal data
+          for (const p of node.ports.filter(p => p.direction === 'in')) {
+            inputs[p.name] = node.data[p.name];
+          }
+          const outputs = await impl(node, inputs, { log: debug });
+          // Store outputs in node data
+          for (const p of node.ports.filter(p => p.direction === 'out')) {
+            if (outputs && p.name in outputs) {
+              node.data[p.name] = outputs[p.name];
+            }
+          }
+        }
+      }
+    }
+    
     const starts = graph.nodes.filter(n => n.kind === 'logic:start');
     for (const start of starts) {
       await step(start.id);
@@ -103,9 +124,9 @@ Logic.define('logic:mul', (node, i, { log }) => {
 
 Logic.define('logic:vec3', (node, i, { log }) => {
   const v = {
-    x: Number(i.x ?? 0),
-    y: Number(i.y ?? 0),
-    z: Number(i.z ?? 0)
+    x: Number(i.x ?? node.data.x ?? 0),
+    y: Number(i.y ?? node.data.y ?? 0),
+    z: Number(i.z ?? node.data.z ?? 0)
   };
   log(`Vec3: (${v.x}, ${v.y}, ${v.z})\n`);
   return { v };
