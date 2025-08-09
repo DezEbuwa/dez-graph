@@ -89,7 +89,7 @@ Logic.define('logic:add', (node, i, { log }) => {
   const a = Number(i.a ?? 0);
   const b = Number(i.b ?? 0);
   const out = a + b;
-  log(`Add: ${a}+${b}=${out}`);
+  log(`Add: ${a}+${b}=${out}\n`);
   return { out };
 });
 
@@ -97,7 +97,7 @@ Logic.define('logic:mul', (node, i, { log }) => {
   const a = Number(i.a ?? 0);
   const b = Number(i.b ?? 0);
   const out = a * b;
-  log(`Mul: ${a}*${b}=${out}`);
+  log(`Mul: ${a}*${b}=${out}\n`);
   return { out };
 });
 
@@ -107,7 +107,7 @@ Logic.define('logic:vec3', (node, i, { log }) => {
     y: Number(i.y ?? 0),
     z: Number(i.z ?? 0)
   };
-  log(`Vec3: (${v.x}, ${v.y}, ${v.z})`);
+  log(`Vec3: (${v.x}, ${v.y}, ${v.z})\n`);
   return { v };
 });
 
@@ -121,14 +121,14 @@ Logic.define('logic:dot', (node, i, { log }) => {
   const a = i.a || { x: 0, y: 0, z: 0 };
   const b = i.b || { x: 0, y: 0, z: 0 };
   const out = a.x * b.x + a.y * b.y + a.z * b.z;
-  log(`Dot: ⟨a,b⟩=${out}`);
+  log(`Dot: ⟨a,b⟩=${out}\n`);
   return { out };
 });
 
 Logic.define('logic:length', (node, i, { log }) => {
   const a = i.a || { x: 0, y: 0, z: 0 };
   const out = Math.hypot(a.x || 0, a.y || 0, a.z || 0);
-  log(`Length: ∥a∥=${out}`);
+  log(`Length: ∥a∥=${out}\n`);
   return { out };
 });
 
@@ -137,9 +137,9 @@ Logic.define('logic:print', (node, i, { log }) => {
   if (v === undefined || v === null) {
     log(`Print: <no input connected or undefined>`);
   } else if (typeof v === 'object') {
-    log(`Print: ${JSON.stringify(v)}`);
+    log(`Print: ${JSON.stringify(v)}\n`);
   } else {
-    log(`Print: ${v}`);
+    log(`Print: ${v}\n`);
   }
   return {};
 });
