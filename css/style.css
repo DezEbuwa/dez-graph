@@ -85,6 +85,15 @@ h3 {
   box-shadow: 0 0 0 1px inset var(--accent);
 }
 
+/* ===== Sidebar Buttons ===== */
+.left .btn,
+.right .btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 6px 0;
+}
+
 /* ===== Canvas Area ===== */
 .canvas-wrap {
   position: relative;
