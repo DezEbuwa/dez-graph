@@ -262,10 +262,19 @@ export class Editor {
   }
 
   validateConnection(fromPort, toPort) {
+    // Basic direction check: can only connect output to input
     if (fromPort.direction !== 'out' || toPort.direction !== 'in') return false;
-    if (fromPort.isExec !== toPort.isExec && (fromPort.isExec || toPort.isExec)) return false;
+    
+    // Type compatibility: exec ports can only connect to exec ports, data to data
+    if (fromPort.isExec !== toPort.isExec) return false;
+    
+    // For execution ports: output exec can only connect to input exec
+    if (fromPort.isExec && toPort.isExec) {
+      return fromPort.direction === 'out' && toPort.direction === 'in';
+    }
+    
+    // For data ports: check type compatibility
     const t1 = fromPort.type, t2 = toPort.type;
-    if (fromPort.isExec) return true;
     if (t1 === 'any' || t2 === 'any') return true;
     return t1 === t2; // simple type check
   }

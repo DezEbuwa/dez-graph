@@ -44,11 +44,11 @@ const loadExample = () => {
   
   graph.nodes.push(g, start, v1, v2, dot, prt);
   graph.edges.push(
-    new Edge({ from: `${start.id}:out`, to: `${dot.id}:in`, isExec: true }),
+    new Edge({ from: `${start.id}:execOut`, to: `${dot.id}:execIn`, isExec: true }),
     new Edge({ from: `${v1.id}:v`, to: `${dot.id}:a` }),
     new Edge({ from: `${v2.id}:v`, to: `${dot.id}:b` }),
     new Edge({ from: `${dot.id}:out`, to: `${prt.id}:in` }),
-    new Edge({ from: `${dot.id}:out`, to: `${prt.id}:in`, isExec: true })
+    new Edge({ from: `${dot.id}:execOut`, to: `${prt.id}:execIn`, isExec: true })
   );
   renderer.draw();
 };

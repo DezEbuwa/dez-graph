@@ -132,7 +132,7 @@ export class Renderer {
         ctx.fillStyle = '#8c96a5';
         ctx.font = '11px system-ui';
         ctx.textAlign = 'left';
-        ctx.fillText('exec', n.x + 8, y + 3);
+        ctx.fillText(p.name === 'execIn' ? 'exec' : 'exec', n.x + 8, y + 3);
       }
       
       const isHover = this.hoverPort && this.hoverPort.port === p;
@@ -167,7 +167,7 @@ export class Renderer {
         ctx.fillStyle = '#8c96a5';
         ctx.font = '11px system-ui';
         ctx.textAlign = 'right';
-        ctx.fillText('exec', n.x + n.w - 8, y + 3);
+        ctx.fillText(p.name === 'execOut' ? 'exec' : 'exec', n.x + n.w - 8, y + 3);
       }
       
       const isHover = this.hoverPort && this.hoverPort.port === p;

@@ -19,8 +19,11 @@ export const Logic = {
     
     for (const e of graph.edges) {
       if (e.isExec) {
-        const [from] = e.from.split(':');
-        (execOut.get(from) || execOut.set(from, []).get(from)).push(e);
+        const [from, fromPort] = e.from.split(':');
+        // Only add to execOut if it's actually an execution output port
+        if (fromPort === 'execOut') {
+          (execOut.get(from) || execOut.set(from, []).get(from)).push(e);
+        }
       } else {
         (dataIn.get(e.to) || dataIn.set(e.to, []).get(e.to)).push(e);
       }
@@ -157,7 +160,7 @@ export function makeLogicNode(kind, x, y) {
   if (kind === 'logic:start') {
     n.ports = [logicPorts.execOut()];
     n.ports[0].nodeId = n.id;
-    n.ports[0].name = 'out';
+    n.ports[0].name = 'execOut';
   } else if (kind === 'logic:add' || kind === 'logic:mul') {
     n.ports = [
       logicPorts.execIn(),
@@ -167,6 +170,9 @@ export function makeLogicNode(kind, x, y) {
       logicPorts.out('out', 'number')
     ];
     n.ports.forEach(p => p.nodeId = n.id);
+    // Set proper names for exec ports
+    n.ports[0].name = 'execIn';
+    n.ports[1].name = 'execOut';
     n.data.a = 1;
     n.data.b = 1;
   } else if (kind === 'logic:vec3') {
@@ -198,6 +204,9 @@ export function makeLogicNode(kind, x, y) {
       logicPorts.out('out', 'number')
     ];
     n.ports.forEach(p => p.nodeId = n.id);
+    // Set proper names for exec ports
+    n.ports[0].name = 'execIn';
+    n.ports[1].name = 'execOut';
   } else if (kind === 'logic:length') {
     n.ports = [
       logicPorts.in('a', 'vector3'),
@@ -210,6 +219,8 @@ export function makeLogicNode(kind, x, y) {
       logicPorts.in('in', 'any')
     ];
     n.ports.forEach(p => p.nodeId = n.id);
+    // Set proper name for exec port
+    n.ports[0].name = 'execIn';
   }
 
   return n;
